@@ -1,9 +1,10 @@
 const mongoose = require('mongoose');
 
 const UserSchema = new mongoose.Schema({
-  name: String,
+  userName: String,
   email: String,
   password: String,
+  posts: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Post' }],
 });
 mongoose.model('User', UserSchema);
 

@@ -16,7 +16,7 @@ router.post('/login', async (req, res) => {
     const passwordIsValid = bcrypt.compareSync(req.body.password, user.password);
     if (!passwordIsValid) return res.status(401).send({ auth: false, token: null });
 
-    const token = jwt.sign({ id: user.id }, config.secret, {
+    const token = jwt.sign({ id: user._id }, config.secret, {
       expiresIn: 86400,
     });
 
@@ -31,6 +31,12 @@ router.post('/register', async (req, res) => {
   const hashedPassword = bcrypt.hashSync(req.body.password, 8);
 
   try {
+    const checkExistsUser = await User.find({ email: req.body.email });
+
+    if (checkExistsUser.length > 0) {
+      return res.status(303).send('user already exests');
+    }
+
     const user = await User.create({
       name: req.body.name,
       email: req.body.email,
