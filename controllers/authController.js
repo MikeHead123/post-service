@@ -2,7 +2,8 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
-const User = require('./../models/User');
+const User = require('./../models/user');
+const checkUserParams = require('./../middleware/checkUserParams');
 const config = require('../config');
 
 const router = express.Router();
@@ -33,7 +34,7 @@ router.post('/login', async (req, res) => {
 });
 
 
-router.post('/register', async (req, res) => {
+router.post('/register', checkUserParams, async (req, res) => {
   const hashedPassword = await bcrypt.hash(req.body.password, 8);
 
   try {
@@ -58,6 +59,5 @@ router.post('/register', async (req, res) => {
     return res.status(500).send('save user problem');
   }
 });
-
 
 module.exports = router;

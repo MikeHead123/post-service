@@ -1,8 +1,8 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const verifyToken = require('./../middleware/VerifyToken');
-const Post = require('./../models/Post');
-const User = require('./../models/User');
+const verifyToken = require('./../middleware/verifyToken');
+const Post = require('./../models/post');
+const User = require('./../models/user');
 
 const router = express.Router();
 router.use(bodyParser.json());
