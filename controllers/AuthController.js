@@ -12,11 +12,17 @@ router.post('/login', async (req, res) => {
   try {
     const user = await User.findOne({ email: req.body.email });
 
-    if (!user) return res.status(404).send('user not found');
-    const passwordIsValid = bcrypt.compareSync(req.body.password, user.password);
-    if (!passwordIsValid) return res.status(401).send({ auth: false, token: null });
+    if (user === null) {
+      return res.status(404).send('user not found');
+    }
 
-    const token = jwt.sign({ id: user._id }, config.secret, {
+    const passwordIsValid = await bcrypt.compare(req.body.password, user.password);
+
+    if (passwordIsValid === false) {
+      return res.status(401).send('password or login is not valid');
+    }
+
+    const token = jwt.sign({ user }, config.secret, {
       expiresIn: 86400,
     });
 
@@ -28,13 +34,13 @@ router.post('/login', async (req, res) => {
 
 
 router.post('/register', async (req, res) => {
-  const hashedPassword = bcrypt.hashSync(req.body.password, 8);
+  const hashedPassword = await bcrypt.hash(req.body.password, 8);
 
   try {
-    const checkExistsUser = await User.find({ email: req.body.email });
+    const checkExistsUser = await User.findOne({ email: req.body.email });
 
-    if (checkExistsUser.length > 0) {
-      return res.status(303).send('user already exests');
+    if (checkExistsUser !== null) {
+      return res.status(303).send('user already exists');
     }
 
     const user = await User.create({
@@ -43,7 +49,7 @@ router.post('/register', async (req, res) => {
       password: hashedPassword,
     });
 
-    const token = jwt.sign({ id: user.id }, config.secret, {
+    const token = jwt.sign({ user }, config.secret, {
       expiresIn: 86400,
     });
 

@@ -16,10 +16,14 @@ router.post('/', verifyToken, async (req, res) => {
     });
 
     const user = await User.findOne({ _id: req.body.author });
+
+    if (user === null) {
+      return res.status(404).send('user not found');
+    }
+
     user.posts.push(post._id);
     await user.save();
 
-    if (!post) return res.status(404).send('post not found');
     return res.status(200).send(post);
   } catch (err) {
     return res.status(500).send('post save error');
@@ -29,7 +33,7 @@ router.post('/', verifyToken, async (req, res) => {
 router.get('/', verifyToken, async (req, res) => {
   try {
     const post = await Post.find({}).populate('author', '_id userName');
-    if (!post) return res.status(404).send('posts not found');
+
     return res.status(200).send(post);
   } catch (err) {
     return res.status(500).send('post get error');
