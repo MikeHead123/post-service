@@ -27,7 +27,7 @@ router.post('/login', async (req, res) => {
       expiresIn: 86400,
     });
 
-    return res.status(200).send({ auth: true, token });
+    return res.status(200).send({ auth: true, token, userId: user._id });
   } catch (err) {
     return res.status(500).send('login error');
   }
@@ -45,7 +45,7 @@ router.post('/register', checkUserParams, async (req, res) => {
     }
 
     const user = await User.create({
-      name: req.body.name,
+      userName: req.body.userName,
       email: req.body.email,
       password: hashedPassword,
     });
@@ -54,7 +54,7 @@ router.post('/register', checkUserParams, async (req, res) => {
       expiresIn: 86400,
     });
 
-    return res.status(200).send({ auth: true, token });
+    return res.status(200).send({ auth: true, token, userId: user._id });
   } catch (err) {
     return res.status(500).send('save user problem');
   }
