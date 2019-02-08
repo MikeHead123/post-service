@@ -28,7 +28,7 @@ router.get('/:id', verifyToken, async (req, res) => {
       },
     ]).toArray();
 
-    if (user === null) {
+    if (user.length === 0) {
       return res.status(404).send('user not found');
     }
 
