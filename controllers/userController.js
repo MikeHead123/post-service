@@ -20,6 +20,8 @@ router.get('/:id', verifyToken, async (req, res) => {
         $project: {
           _id: 1,
           userName: 1,
+          email: 1,
+          password: 1,
           'posts.postTitle': 1,
           'posts._id': 1,
         },
