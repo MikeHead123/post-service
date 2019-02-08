@@ -1,12 +1,30 @@
 const express = require('express');
+const { ObjectId } = require('mongodb');
 const verifyToken = require('./../middleware/verifyToken');
-const User = require('./../models/user');
 
 const router = express.Router();
 
 router.get('/:id', verifyToken, async (req, res) => {
   try {
-    const user = await User.findById(req.params.id).populate('posts', '_id postTitle');
+    const { db } = req.app.locals;
+    const user = await db.collection('users').aggregate([{ $match: { _id: ObjectId(req.params.id) } },
+      {
+        $lookup: {
+          from: 'posts',
+          localField: 'posts',
+          foreignField: '_id',
+          as: 'posts',
+        },
+      },
+      {
+        $project: {
+          _id: 1,
+          userName: 1,
+          'posts.postTitle': 1,
+          'posts._id': 1,
+        },
+      },
+    ]).toArray();
 
     if (user === null) {
       return res.status(404).send('user not found');

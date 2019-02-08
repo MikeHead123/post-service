@@ -2,7 +2,6 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
-const User = require('./../models/user');
 const checkUserParams = require('./../middleware/checkUserParams');
 const config = require('../config');
 
@@ -11,7 +10,8 @@ router.use(bodyParser.json());
 
 router.post('/login', async (req, res) => {
   try {
-    const user = await User.findOne({ email: req.body.email });
+    const { db } = req.app.locals;
+    const user = await db.collection('users').findOne({ email: req.body.email });
 
     if (user === null) {
       return res.status(404).send('user not found');
@@ -38,13 +38,14 @@ router.post('/register', checkUserParams, async (req, res) => {
   const hashedPassword = await bcrypt.hash(req.body.password, 8);
 
   try {
-    const checkExistsUser = await User.findOne({ email: req.body.email });
+    const { db } = req.app.locals;
+    const checkExistsUser = await db.collection('users').findOne({ email: req.body.email });
 
     if (checkExistsUser !== null) {
       return res.status(303).send('user already exists');
     }
 
-    const user = await User.create({
+    const user = await db.collection('users').insertOne({
       userName: req.body.userName,
       email: req.body.email,
       password: hashedPassword,
@@ -54,7 +55,7 @@ router.post('/register', checkUserParams, async (req, res) => {
       expiresIn: 86400,
     });
 
-    return res.status(200).send({ auth: true, token, userId: user._id });
+    return res.status(200).send({ auth: true, token, userId: user.insertedId });
   } catch (err) {
     return res.status(500).send('save user problem');
   }
