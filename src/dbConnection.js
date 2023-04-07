@@ -1,10 +1,9 @@
 const mongoose = require('mongoose');
 
 module.exports = async () => {
-  // mongoose.connect(`mongodb://${process.env.DB_HOST || 'localhost'}:27018/postStore?directConnection=true`);
   console.log('start db connection');
   try {
-    await mongoose.connect(`mongodb://${process.env.DB_HOST || 'localhost'}:27017/postStore?directConnection=true`, {
+    await mongoose.connect(`mongodb://${process.env.DB_HOST || 'localhost'}:${process.env.DB_HOST}/postStore?directConnection=true`, {
       useUnifiedTopology: true,
       useCreateIndex: true,
       useNewUrlParser: true,
