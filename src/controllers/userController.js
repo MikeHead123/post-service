@@ -1,8 +1,10 @@
 const express = require('express');
 const jwt = require('jsonwebtoken');
+const bcrypt = require('bcryptjs');
 const verifyToken = require('./../middleware/verifyToken');
 const User = require('./../models/user');
 const config = require('../config');
+const checkUserParams = require('./../middleware/checkUserParams');
 
 const router = express.Router();
 
@@ -20,17 +22,29 @@ router.get('/:id', verifyToken, async (req, res) => {
   }
 });
 
-router.post('/', async (req, res) => {
+router.post('/register', checkUserParams, async (req, res) => {
   try {
-    const token = jwt.sign({ foo: 'bar' }, config.secret);
-    const data = {
-      ...req.body,
-      token,
-    };
-    const user = await User.create(data);
-    res.status(201).send(user);
+    const hashedPassword = await bcrypt.hash(req.body.password, 8);
+
+    const checkExistsUser = await User.findOne({ email: req.body.email });
+
+    if (checkExistsUser !== null) {
+      return res.status(303).send('user already exists');
+    }
+
+    const user = await User.create({
+      userName: req.body.userName,
+      email: req.body.email,
+      password: hashedPassword,
+    });
+
+    const token = jwt.sign({ user }, config.secret, {
+      expiresIn: 86400,
+    });
+
+    return res.status(200).send({ auth: true, token, userId: user._id });
   } catch (err) {
-    res.status(500).send('server error');
+    return res.status(500).send('save user problem');
   }
 });
 

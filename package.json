@@ -18,9 +18,8 @@
   },
   "homepage": "https://github.com/MikeHead123/post-service#readme",
   "dependencies": {
-    "bcryptjs": "^2.4.3",
-    "bluebird": "^3.5.3",
-    "body-parser": "^1.18.3",
+    "bcryptjs": "2.4.3",
+    "bluebird": "3.7.2",
     "express": "^4.16.4",
     "jsonwebtoken": "^8.4.0",
     "mongoose": "5.13.17"
