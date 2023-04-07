@@ -1,18 +1,16 @@
 version: "2"
 services:
+  mongo:
+    image: mongo
+    ports:
+    - "27018:27017"
+    volumes:
+    - ./post-service-data:/data/db
   web:
     build: .
     environment:
       - DB_HOST=mongo
     ports:
     - "3000:3000"
-    depends_on:
-    - mongo
-  mongo:
-    image: mongo
-    ports:
-    - "27017:27017"
-    volumes:
-    - data-volume:/data/db
 volumes:
   data-volume:

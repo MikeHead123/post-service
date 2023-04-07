@@ -1,0 +1,8 @@
+# ignore everything by default
+*
+
+# Except
+!src
+!package*.json
+!.env
+!.eslintrc

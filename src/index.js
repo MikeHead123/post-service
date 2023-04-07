@@ -1,11 +1,16 @@
 
 const port = process.env.PORT || 3000;
-const app = require('express')();
+const express = require('express');
 require('./dbConnection')();
+
+const app = express();
+
 
 const userController = require('./controllers/userController');
 const authController = require('./controllers/authController');
 const postController = require('./controllers/postController');
+
+app.use(express.json());
 
 app.use('/api/users', userController);
 

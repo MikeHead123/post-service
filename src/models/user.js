@@ -4,6 +4,7 @@ const UserSchema = new mongoose.Schema({
   userName: String,
   email: String,
   password: String,
+  token: String,
   posts: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Post' }],
 });
 mongoose.model('User', UserSchema);

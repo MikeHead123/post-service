@@ -1,11 +1,9 @@
-FROM node:10
+FROM node:16.14.0-alpine
 # Create app directory
 WORKDIR /usr/src/app
 # Install app dependencies
-COPY package*.json ./
-RUN npm install
-# Copy app source code
 COPY . .
+RUN npm install
 #Expose port and start application
 EXPOSE 3000
 CMD [ "npm", "start" ]
