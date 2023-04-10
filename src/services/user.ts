@@ -16,6 +16,11 @@ export default class UserService {
     return user;
   }
 
+  public async getByEmail(email: string) {
+    const user = await this.userRepo.getByEmail(email);
+    return user;
+  }
+
   public async create({ password, email, name }) {
     const hashedPassword = await bcrypt.hash(password, 8);
 
