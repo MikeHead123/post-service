@@ -13,7 +13,7 @@ const router = express.Router();
 router.get('/:id', verifyToken, async (req: Request, res: Response, next: NextFunction) => {
   try {
     const userService = Container.get(UserService);
-    const user = await userService.get(req.params.id);
+    const user = await userService.getById(req.params.id);
 
     if (!user) {
       throw new ClientError('User not found', 404);

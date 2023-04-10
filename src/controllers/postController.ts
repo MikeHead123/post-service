@@ -1,10 +1,9 @@
-import verifyToken from '../middleware/verifyToken';
-
 import express, { Request, Response, NextFunction } from 'express';
-
-const Post = require('../models/post');
-const User = require('../models/user');
-const ClientError = require('../common/error');
+import Container from 'typedi';
+import ClientError from '../common/error';
+import verifyToken from '../middleware/verifyToken';
+import PostService from '../services/post';
+import UserService from '../services/user';
 
 const router = express.Router();
 
@@ -12,33 +11,34 @@ router.use(verifyToken);
 
 router.post('/', async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const user = await User.findOne({ _id: req.body.author }).lean();
+    const userService = Container.get(UserService);
+    const postService = Container.get(PostService);
+    const user = await userService.getById(req.body.author);
 
     if (!user) {
       throw new ClientError('User not found', 404);
     }
 
-    const post = await Post.create({
-      postTitle: req.body.postTitle,
-      postBody: req.body.postBody,
+    const post = await postService.create({
+      title: req.body.title,
+      text: req.body.text,
       author: req.body.author,
     });
 
     res.status(200).send(post);
   } catch (err) {
-    next(new ClientError(500, 'server error'));
+    next(err);
   }
 });
 
 router.get('/', async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const post = await Post.find({
-      author: req.query.author,
-    }).populate('author', '_id name');
+    const postService = Container.get(PostService);
+    const posts = await postService.get(req.query.author);
 
-    res.status(200).send(post);
+    res.status(200).send(posts);
   } catch (err) {
-    next(new ClientError(500, 'server error'));
+    next(err);
   }
 });
 

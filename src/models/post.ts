@@ -2,14 +2,14 @@ import { Schema, model, Types } from 'mongoose';
 
 interface IPost {
   _id: Types.ObjectId;
-  postTitle: string;
-  postBody: string;
+  title: string;
+  text: string;
   author: Types.ObjectId;
 }
 
 const postSchema = new Schema<IPost>({
-  postTitle: String,
-  postBody: String,
+  title: String,
+  text: String,
   author: { type: Types.ObjectId, ref: 'User' },
 });
 const Post = model<IPost>('Post', postSchema);

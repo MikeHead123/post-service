@@ -11,7 +11,7 @@ export default class UserService {
     this.userRepo = userRepo;
   }
 
-  public async get(id: string) {
+  public async getById(id: string) {
     const user = await this.userRepo.getById(id);
     return user;
   }
