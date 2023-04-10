@@ -1,22 +1,22 @@
 import { Service } from 'typedi';
 
-const User = require('../models/user');
+import { User, IUser } from '../models/user';
 
 @Service()
 export default class UserRepository {
-  public async getById(id: string) {
-    const user = await User.findById(id).populate('posts', '_id postTitle');
+  public async getById(id: string): Promise<IUser> {
+    const user = await User.findById(id).populate('posts', '_id postTitle').lean();
     return user;
   }
 
-  public async getByEmail(email: string) {
+  public async getByEmail(email: string): Promise<IUser> {
     const user = await User.findOne({ email });
     return user;
   }
 
-  public async create({ userName, email, password }) {
+  public async create({ name, email, password }): Promise<IUser> {
     const user = await User.create({
-      userName,
+      name,
       email,
       password,
     });

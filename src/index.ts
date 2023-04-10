@@ -1,12 +1,12 @@
 import 'reflect-metadata';
 import express from 'express';
+import userController from './controllers/userController';
+import authController from './controllers/authController';
+import postController from './controllers/postController';
 
 require('dotenv-flow').config();
 
 require('./dbConnection')();
-const userController = require('./controllers/userController');
-const authController = require('./controllers/authController');
-const postController = require('./controllers/postController');
 
 const port = process.env.PORT || 3000;
 

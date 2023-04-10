@@ -1,33 +1,35 @@
 import { Service, Inject, Container } from 'typedi';
-import express from 'express';
+import express, { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 import UserService from '../services/user';
 import verifyToken from '../middleware/verifyToken';
 import config from '../common/constants';
-
-const checkUserParams = require('../middleware/checkUserParams');
+import validate from '../middleware/validate';
+import createUserSchema from '../schemas/postUser';
+import ClientError from '../common/error';
 
 const router = express.Router();
-const userService = Container.get(UserService);
 
-router.get('/:id', verifyToken, async (req, res, next) => {
+router.get('/:id', verifyToken, async (req: Request, res: Response, next: NextFunction) => {
   try {
+    const userService = Container.get(UserService);
     const user = await userService.get(req.params.id);
 
     if (!user) {
-      return res.status(404).send('user not found');
+      throw new ClientError('User not found', 404);
     }
 
-    return res.status(200).send(user);
+    res.status(200).send(user);
   } catch (err) {
     next(err);
   }
 });
 
-router.post('/register', checkUserParams, async (req, res, next) => {
+router.post('/register', validate(createUserSchema), async (req: Request, res: Response, next: NextFunction) => {
   try {
+    const userService = Container.get(UserService);
     const user = await userService.create({
-      userName: req.body.userName,
+      name: req.body.name,
       email: req.body.email,
       password: req.body.password,
     });
@@ -38,10 +40,8 @@ router.post('/register', checkUserParams, async (req, res, next) => {
 
     res.status(200).send({ auth: true, token, userId: user._id });
   } catch (err) {
-    console.log('rew rwe rw e');
-    console.log(err);
     next(err);
   }
 });
 
-module.exports = router;
+export default router;

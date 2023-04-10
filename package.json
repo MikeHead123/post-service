@@ -30,7 +30,8 @@
     "mongoose": "5.13.17",
     "reflect-metadata": "0.1.13",
     "typedi": "0.10.0",
-    "typescript": "5.0.4"
+    "typescript": "5.0.4",
+    "zod": "3.21.4"
   },
   "devDependencies": {
     "@types/jsonwebtoken": "^9.0.1",

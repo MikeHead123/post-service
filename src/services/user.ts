@@ -1,8 +1,7 @@
 import { Service, Inject } from 'typedi';
+import * as bcrypt from 'bcryptjs';
+import ClientError from '../common/error';
 import UserRepository from '../dao/user';
-
-const bcrypt = require('bcryptjs');
-const ClientError = require('../common/error');
 
 @Service()
 export default class UserService {
@@ -13,34 +12,25 @@ export default class UserService {
   }
 
   public async get(id: string) {
-    try {
-      const user = await this.userRepo.getById(id);
-      return user;
-    } catch (err) {
-      console.log(err);
-      throw new ClientError();
-    }
+    const user = await this.userRepo.getById(id);
+    return user;
   }
 
-  public async create({ password, email, userName }) {
-    try {
-      const hashedPassword = await bcrypt.hash(password, 8);
+  public async create({ password, email, name }) {
+    const hashedPassword = await bcrypt.hash(password, 8);
 
-      const checkExistsUser = await this.userRepo.getByEmail(email);
+    const checkExistsUser = await this.userRepo.getByEmail(email);
 
-      if (checkExistsUser) {
-        throw new ClientError('User already exists', 400);
-      }
-
-      const user = await this.userRepo.create({
-        userName,
-        email,
-        password: hashedPassword,
-      });
-
-      return user;
-    } catch (err) {
-      throw new ClientError();
+    if (checkExistsUser) {
+      throw new ClientError('User already exists', 400);
     }
+
+    const user = await this.userRepo.create({
+      name,
+      email,
+      password: hashedPassword,
+    });
+
+    return user;
   }
 }
