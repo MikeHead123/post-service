@@ -1,4 +1,4 @@
-import { Service, Inject, Container } from 'typedi';
+import { Container } from 'typedi';
 import express, { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 import UserService from '../services/user';

@@ -5,6 +5,12 @@ import verifyToken from '../middleware/verifyToken';
 import PostService from '../services/post';
 import UserService from '../services/user';
 
+interface IPostRequest extends Request {
+  query: {
+    author: string;
+  };
+}
+
 const router = express.Router();
 
 router.use(verifyToken);
@@ -31,7 +37,7 @@ router.post('/', async (req: Request, res: Response, next: NextFunction) => {
   }
 });
 
-router.get('/', async (req: Request, res: Response, next: NextFunction) => {
+router.get('/', async (req: IPostRequest, res: Response, next: NextFunction) => {
   try {
     const postService = Container.get(PostService);
     const posts = await postService.get(req.query.author);

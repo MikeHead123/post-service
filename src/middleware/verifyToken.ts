@@ -1,11 +1,18 @@
 /* eslint-disable consistent-return */
-import jwt from 'jsonwebtoken';
+import jwt, { JwtPayload } from 'jsonwebtoken';
 import Promise from 'bluebird';
 import { Request, Response, NextFunction } from 'express';
 import config from '../common/constants';
 import ClientError from '../common/error';
 
-const verifyToken = async (req: Request, res: Response, next: NextFunction) => {
+interface ICustomRequest extends Request {
+  authData: JwtPayload;
+  headers: {
+    'x-access-token': string;
+  }
+}
+
+const verifyToken = async (req: ICustomRequest, res: Response, next: NextFunction) => {
   const token = req.headers['x-access-token'];
 
   if (!token) {

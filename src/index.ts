@@ -1,14 +1,13 @@
 import 'reflect-metadata';
-import express from 'express';
+import express, { Request, Response, NextFunction } from 'express';
+import * as dotenv from 'dotenv-flow';
 import userController from './controllers/userController';
 import authController from './controllers/authController';
 import postController from './controllers/postController';
+import config from './common/constants';
+import MongoConnector from './db/MongoConnector';
 
-require('dotenv-flow').config();
-
-require('./dbConnection')();
-
-const port = process.env.PORT || 3000;
+dotenv.config();
 
 const app = express();
 
@@ -20,7 +19,7 @@ app.use('/api/auth', authController);
 
 app.use('/api/post', postController);
 
-app.use((err, req, res, next) => {
+app.use((err: any, req: Request, res: Response, next: NextFunction) => {
   let error = err;
   if (!(error instanceof Error)) error = new Error(err);
 
@@ -29,4 +28,7 @@ app.use((err, req, res, next) => {
   return res.status(statusCode).json({ message });
 });
 
-app.listen(port, () => console.log(`Express server listening on port ${port}`));
+app.listen(config.PORT, async () => {
+  await MongoConnector.connect();
+  console.log(`Express server listening on port ${config.PORT}`);
+});
