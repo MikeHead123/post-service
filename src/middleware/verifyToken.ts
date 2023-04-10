@@ -1,7 +1,7 @@
 /* eslint-disable consistent-return */
-const jwt = require('jsonwebtoken');
-const Promise = require('bluebird');
-const redis = require('../communicators/redis');
+import jwt from 'jsonwebtoken';
+import Promise from 'bluebird';
+
 const config = require('../config');
 const ClientError = require('../common/error');
 
@@ -19,8 +19,8 @@ const verifyToken = async (req, res, next) => {
     req.authData = decoded;
     next();
   } catch (err) {
-    next(new ClientError(500, 'Failed to authenticate token'));
+    next(new ClientError('Failed to authenticate token', 400));
   }
 };
 
-module.exports = verifyToken;
+export default verifyToken;

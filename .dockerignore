@@ -6,3 +6,5 @@
 !package*.json
 !.env
 !.eslintrc
+!.eslintignore
+!tsconfig.json

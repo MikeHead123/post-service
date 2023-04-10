@@ -6,10 +6,6 @@ services:
     - 27018:27017
     volumes:
     - ./post-service-data:/data/db
-  redis: 
-    image: redis
-    ports:
-    - 6780:6379
   web:
     build: .
     environment:

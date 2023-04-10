@@ -1,3 +1,51 @@
 {
-  "extends": "airbnb/base"
+  "env": {
+    "commonjs": true,
+    "es2021": true
+  },
+  "extends": [
+    "airbnb-base",
+    "airbnb-typescript/base"
+  ],
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "project": "./tsconfig.json",
+    "ecmaVersion": "latest"
+  },
+  "plugins": [
+    "@typescript-eslint",
+    "no-loops"
+  ],
+  "rules": {
+    "import/no-import-module-exports": "off",
+    "@typescript-eslint/no-unused-vars": "off",
+    "no-unused-vars": "off",
+    "consistent-return": "off",
+    "naming-convention": "off",
+    "no-underscore-dangle": "off",
+    "object-curly-newline": "off",
+    "no-param-reassign": ["error", { "props": false }],
+    "no-loops/no-loops": 2,
+    "max-len": [
+      "error",
+      140,
+      2,
+      {
+        "ignoreUrls": true,
+        "ignoreComments": true,
+        "ignoreRegExpLiterals": true,
+        "ignoreStrings": true,
+        "ignoreTemplateLiterals": true
+      }
+    ],
+    "implicit-arrow-linebreak": "off",
+    "class-methods-use-this": "off"
+  },
+  "settings": {
+    "import/resolver": {
+      "node": {
+        "paths": ["src"]
+      }
+    }
+  }
 }

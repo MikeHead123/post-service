@@ -1,6 +1,8 @@
+import 'reflect-metadata';
+import express from 'express';
 
 const port = process.env.PORT || 3000;
-const express = require('express');
+
 require('./dbConnection')();
 const userController = require('./controllers/userController');
 const authController = require('./controllers/authController');
@@ -24,6 +26,5 @@ app.use((err, req, res, next) => {
   const statusCode = err.statusCode || 500;
   return res.status(statusCode).json({ message });
 });
-
 
 app.listen(port, () => console.log(`Express server listening on port ${port}`));

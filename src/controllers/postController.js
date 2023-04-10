@@ -1,7 +1,9 @@
+import verifyToken from '../middleware/verifyToken';
+
 const express = require('express');
-const verifyToken = require('./../middleware/verifyToken');
-const Post = require('./../models/post');
-const User = require('./../models/user');
+
+const Post = require('../models/post');
+const User = require('../models/user');
 const ClientError = require('../common/error');
 
 const router = express.Router();

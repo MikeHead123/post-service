@@ -1,5 +1,5 @@
 class ClientError extends Error {
-  constructor(code = 500, message, isLogged = true) {
+  constructor(message = 'server error', code = 500, isLogged = true) {
     super(message);
     this.status = code;
     this.isLogged = isLogged;
