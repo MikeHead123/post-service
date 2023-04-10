@@ -1,8 +1,8 @@
 /* eslint-disable consistent-return */
 import jwt from 'jsonwebtoken';
 import Promise from 'bluebird';
+import config from '../common/constants';
 
-const config = require('../config');
 const ClientError = require('../common/error');
 
 const verifyToken = async (req, res, next) => {
@@ -15,7 +15,7 @@ const verifyToken = async (req, res, next) => {
   const jwtVerifyAsync = Promise.promisify(jwt.verify, jwt);
 
   try {
-    const decoded = await jwtVerifyAsync(token, config.secret);
+    const decoded = await jwtVerifyAsync(token, config.SECRET);
     req.authData = decoded;
     next();
   } catch (err) {

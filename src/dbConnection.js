@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 module.exports = async () => {
   console.log('start db connection');
   try {
-    await mongoose.connect(`mongodb://${process.env.DB_HOST || 'localhost'}:${process.env.DB_HOST}/postStore?directConnection=true`, {
+    await mongoose.connect(`mongodb://${process.env.DB_HOST}:${process.env.DB_PORT}/postStore?directConnection=true`, {
       useUnifiedTopology: true,
       useCreateIndex: true,
       useNewUrlParser: true,

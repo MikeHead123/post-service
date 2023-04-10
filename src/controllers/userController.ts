@@ -3,8 +3,8 @@ import express from 'express';
 import jwt from 'jsonwebtoken';
 import UserService from '../services/user';
 import verifyToken from '../middleware/verifyToken';
+import config from '../common/constants';
 
-const config = require('../config');
 const checkUserParams = require('../middleware/checkUserParams');
 
 const router = express.Router();
@@ -32,7 +32,7 @@ router.post('/register', checkUserParams, async (req, res, next) => {
       password: req.body.password,
     });
 
-    const token = jwt.sign({ user }, config.secret, {
+    const token = jwt.sign({ user }, config.SECRET, {
       expiresIn: 86400,
     });
 
