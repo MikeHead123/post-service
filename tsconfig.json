@@ -2,8 +2,8 @@
   "compilerOptions": {
     /* Language and Environment */
     "target": "es2020",
-
     "esModuleInterop": true,
+    "inlineSourceMap": true,
 
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
@@ -26,7 +26,6 @@
 
     /* Emit */
     "outDir": "dist",
-    "sourceMap": true,
 
     /* Completeness */
     "skipLibCheck": true,

@@ -1,9 +1,12 @@
 import { connect } from 'mongoose';
+import Container from 'typedi';
 import config from '../common/constants';
+import CustomLogger from '../common/logger';
 
+const customLogger = Container.get(CustomLogger);
 export default class MongoConnector {
   static async connect() {
-    console.log('start db connection');
+    customLogger.info('START_DB_CONNECTION');
     try {
       await connect(`mongodb://${config.DB_HOST}:${config.DB_PORT}/postStore?directConnection=true`, {
         useUnifiedTopology: true,
@@ -12,10 +15,9 @@ export default class MongoConnector {
         useFindAndModify: false,
         readPreference: 'secondaryPreferred',
       });
-      console.log('success db connection');
+      customLogger.info('SUCCESS_DB_CONNECTION');
     } catch (err) {
-      console.log('DB_CONNECTION_ERROR');
-      console.log(err);
+      customLogger.error('DB_CONNECTION_ERROR', JSON.stringify(err));
     }
   }
 }
