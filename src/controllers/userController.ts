@@ -5,7 +5,7 @@ import UserService from '../services/user';
 import verifyToken from '../middleware/verifyToken';
 import config from '../common/constants';
 import validate from '../middleware/validate';
-import createUserSchema from '../schemas/postUser';
+import createUserSchema from '../schemas/user';
 import ClientError from '../common/error';
 
 const router = express.Router();

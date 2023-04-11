@@ -1,7 +1,9 @@
 import express, { Request, Response, NextFunction } from 'express';
 import Container from 'typedi';
 import ClientError from '../common/error';
+import validate from '../middleware/validate';
 import verifyToken from '../middleware/verifyToken';
+import createPostSchema from '../schemas/post';
 import PostService from '../services/post';
 import UserService from '../services/user';
 
@@ -15,7 +17,7 @@ const router = express.Router();
 
 router.use(verifyToken);
 
-router.post('/', async (req: Request, res: Response, next: NextFunction) => {
+router.post('/', validate(createPostSchema), async (req: Request, res: Response, next: NextFunction) => {
   try {
     const userService = Container.get(UserService);
     const postService = Container.get(PostService);
