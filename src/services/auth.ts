@@ -1,7 +1,7 @@
 import { Service, Inject } from 'typedi';
 import * as bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import ClientError from '../common/error';
+import { ClientError } from '../common/error';
 import UserService from './user';
 import config from '../common/constants';
 

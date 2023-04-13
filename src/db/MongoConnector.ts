@@ -18,6 +18,7 @@ export default class MongoConnector {
       customLogger.info('SUCCESS_DB_CONNECTION');
     } catch (err) {
       customLogger.error('DB_CONNECTION_ERROR', JSON.stringify(err));
+      process.exit(1);
     }
   }
 }

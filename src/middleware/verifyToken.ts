@@ -3,7 +3,7 @@ import jwt, { JwtPayload } from 'jsonwebtoken';
 import Promise from 'bluebird';
 import { Request, Response, NextFunction } from 'express';
 import config from '../common/constants';
-import ClientError from '../common/error';
+import { ClientError } from '../common/error';
 
 interface ICustomRequest extends Request {
   authData: JwtPayload;

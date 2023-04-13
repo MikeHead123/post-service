@@ -1,6 +1,6 @@
 import express, { Request, Response, NextFunction } from 'express';
 import Container from 'typedi';
-import ClientError from '../common/error';
+import { ClientError } from '../common/error';
 import validate from '../middleware/validate';
 import verifyToken from '../middleware/verifyToken';
 import createPostSchema from '../schemas/post';

@@ -1,12 +1,11 @@
 import { Container } from 'typedi';
 import express, { Request, Response, NextFunction } from 'express';
-import jwt from 'jsonwebtoken';
 import UserService from '../services/user';
 import verifyToken from '../middleware/verifyToken';
-import config from '../common/constants';
 import validate from '../middleware/validate';
 import createUserSchema from '../schemas/user';
-import ClientError from '../common/error';
+import { ClientError } from '../common/error';
+import JwtSignerService from '../services/jwtSigner';
 
 const router = express.Router();
 
@@ -28,15 +27,15 @@ router.get('/:id', verifyToken, async (req: Request, res: Response, next: NextFu
 router.post('/register', validate(createUserSchema), async (req: Request, res: Response, next: NextFunction) => {
   try {
     const userService = Container.get(UserService);
+    const jwtSignerService = Container.get(JwtSignerService);
+
     const user = await userService.create({
       name: req.body.name,
       email: req.body.email,
       password: req.body.password,
     });
 
-    const token = jwt.sign({ user }, config.SECRET, {
-      expiresIn: 86400,
-    });
+    const token = jwtSignerService.sign(user);
 
     res.status(200).send({ auth: true, token, userId: user._id });
   } catch (err) {
