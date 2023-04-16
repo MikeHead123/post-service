@@ -8,6 +8,8 @@ services:
     - ./post-service-data:/data/db
   web:
     build: .
+    depends_on:
+      - mongo
     environment:
       - DB_HOST=mongo
       - DB_PORT=27017
